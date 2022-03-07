@@ -1,3 +1,4 @@
+from re import template
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login as do_login
@@ -6,6 +7,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth import logout
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
 
 class LoginView(TemplateView):
     
@@ -42,3 +46,12 @@ def logout_view(request):
     logout(request)
     messages.add_message(request, messages.WARNING, 'Nos vemos pronto')
     return HttpResponseRedirect(reverse('user_login'))
+
+
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('user_login')
+    template_name = 'registration/signup.html'
+
+    def get_success_url(self):
+        return reverse_lazy('user_login') + '?register'
