@@ -10,6 +10,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
+from .forms import UserCreationFormWithEmail
 
 class LoginView(TemplateView):
     
@@ -49,7 +50,7 @@ def logout_view(request):
 
 
 class SignUpView(CreateView):
-    form_class = UserCreationForm
+    form_class = UserCreationFormWithEmail
     success_url = reverse_lazy('user_login')
     template_name = 'registration/signup.html'
 
