@@ -2,18 +2,52 @@
 {% load static %}
 {% block title %}Registro{% endblock %}
 {% block content %}
-<style>.errorlist{color:red;}</style>
+
 <main role="main">
   <div class="container">
+    {% if form.errors %}
+    {% for field in form %}
+    {% for error in field.errors %}
+    <div class="alert alert-danger">
+      <strong>{{ error|escape }}</strong>
+    </div>
+    {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+    <div class="alert alert-danger">
+      <strong>{{ error|escape }}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% comment %} <section class="vh-100 bg-image" style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');"> {% endcomment %}
     <div class="row mt-3">
-      <div class="col-md-9 mx-auto mb-5">
-        <form action="" method="post">{% csrf_token %}
+      <div class="col-md-5 mx-auto mb-5">
+        <form action="" method="post"><input type="hidden">
+          <input type="hidden" name="csrfmiddlewaretoken" value="Pg05P2UP7vUIwzBLtKX1tcXhLRURGKd7rqKCweENVCj69XYMJrXZt72psW44MmWp">
           <h3 class="mb-4">Registro</h3>
-          {{form.as_p}}
-          <p><input type="submit" class="btn btn-primary btn-block" value="Confirmar"></p>
+          <p>
+            <label for="id_username">Username:</label>
+            {% comment %} <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder"> {% endcomment %}
+            <input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus
+              required id="id_username" class="form-control">
+          </p>
+          <p>
+            <label for="id_password1">Password:</label>
+            <input type="password" name="password1" autocomplete="new-password" required id="id_password1"  class="form-control">
+          </p>
+          <p>
+            <label for="id_password2">Password confirmation:</label>
+            <input type="password" name="password2" autocomplete="new-password" required id="id_password2"  class="form-control">
+          </p>
+          <button type="submit" class="btn btn-primary">Submit</button>
+          {% comment %} <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp" class="img-fluid" alt="Sample image"> {% endcomment %}
         </form>
       </div>
     </div>
+  </div>
+  </form>
+  </div>
+  </div>
   </div>
 </main>
 {% endblock %}
