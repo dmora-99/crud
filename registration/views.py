@@ -1,6 +1,6 @@
+from dataclasses import fields
 from re import template
 from django.shortcuts import render
-from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login as do_login
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
@@ -9,8 +9,15 @@ from django.urls import reverse
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
+from django.views.generic.edit import UpdateView
+from django.views.generic import TemplateView
 from django.urls import reverse_lazy
-from .forms import UserCreationFormWithEmail
+from .forms import UserCreationFormWithEmail , ProfileForm
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from .models import Profile
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
 
 class LoginView(TemplateView):
     
@@ -56,3 +63,14 @@ class SignUpView(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('user_login') + '?register'
+
+@method_decorator(login_required,name='dispatch')
+class ProfileUpdate(UpdateView):
+
+    form_class = ProfileForm
+    success_url = reverse_lazy('profile')
+    template_name = 'registration/profile_form.html'
+
+    def get_object(self):
+         profile,created =Profile.objects.get_or_create(user=self.request.user)
+         return profile

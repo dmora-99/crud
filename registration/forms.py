@@ -2,9 +2,11 @@ from dataclasses import fields
 import email
 from msilib.schema import Class
 from pyexpat import model
+from tkinter import Widget
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Profile
 
 class UserCreationFormWithEmail (UserCreationForm):
     email = forms.EmailField(required=True,help_text="Campo Obligatorio")
@@ -18,4 +20,16 @@ class UserCreationFormWithEmail (UserCreationForm):
         if User.objects.filter(email= email).exists():
             raise forms.ValidationError("El email ya existe")
         return email
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['avatar','bio','link']
+        widgets = {
+            'avatar': forms.ClearableFileInput(attrs={'class':'form-control-file mt-3'}),
+            'bio': forms.Textarea(attrs={'class':'form-control' , 'rows':3, 'placeholder':'Biografia' }),
+            'link': forms.URLInput(attrs={'class':'form-control-file mt-3' , 'placeholder':'Enlace' }),
+
+        }
+
 
